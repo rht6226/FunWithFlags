@@ -17,6 +17,7 @@ class QuizQuestionActivity : AppCompatActivity(), View.OnClickListener {
     private val questionsList: ArrayList<Question> by lazy { Constants.getQuestions() }
     private var currentPosition: Int = 1
     private var selectedOptionPosition: Int = 0
+    private var mQuestionSubmitted = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +61,7 @@ class QuizQuestionActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun defaultOptionsView() {
+        mQuestionSubmitted = false
         val options = ArrayList<TextView>()
         options.add(0, binding.tvOptionOne)
         options.add(1, binding.tvOptionTwo)
@@ -74,11 +76,13 @@ class QuizQuestionActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun selectedOptionView(tv: TextView, selectedOptionNumber: Int) {
-        defaultOptionsView()
-        selectedOptionPosition = selectedOptionNumber
-        tv.setTextColor(Color.parseColor("#363A43"))
-        tv.setTypeface(tv.typeface, Typeface.BOLD)
-        tv.background = ContextCompat.getDrawable(this, R.drawable.selected_option_border_bg)
+        if (!mQuestionSubmitted) {
+            defaultOptionsView()
+            selectedOptionPosition = selectedOptionNumber
+            tv.setTextColor(Color.parseColor("#363A43"))
+            tv.setTypeface(tv.typeface, Typeface.BOLD)
+            tv.background = ContextCompat.getDrawable(this, R.drawable.selected_option_border_bg)
+        }
     }
 
     private fun answerView(answer: Int, drawableView: Int) {
@@ -136,7 +140,7 @@ class QuizQuestionActivity : AppCompatActivity(), View.OnClickListener {
                     } else {
                         "FINISH"
                     }
-
+                    mQuestionSubmitted = true
                     selectedOptionPosition = 0
                 }
             }
