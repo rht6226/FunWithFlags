@@ -3,8 +3,10 @@ package com.rht6226.quizer
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import com.rht6226.quizer.databinding.ActivityMainBinding
+import kotlin.concurrent.thread
 
 
 class MainActivity : AppCompatActivity() {
