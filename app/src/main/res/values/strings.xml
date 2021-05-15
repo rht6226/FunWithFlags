@@ -5,4 +5,9 @@
     <string name="name">name</string>
     <string name="start">Start</string>
     <string name="submit">SUBMIT</string>
+    <string name="result">Result</string>
+    <string name="image_of_a_trophy">Image of a trophy</string>
+    <string name="congrats">Hey, Congratulations!</string>
+    <string name="finish">FINISH</string>
+    <string name="score">Your Score is %d out of %d</string>
 </resources>

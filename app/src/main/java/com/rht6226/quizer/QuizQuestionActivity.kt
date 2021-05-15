@@ -1,15 +1,19 @@
 package com.rht6226.quizer
 
+import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.widget.TextView
-import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.rht6226.quizer.databinding.ActivityQuizQuestionBinding
+
 
 class QuizQuestionActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -18,6 +22,8 @@ class QuizQuestionActivity : AppCompatActivity(), View.OnClickListener {
     private var currentPosition: Int = 1
     private var selectedOptionPosition: Int = 0
     private var mQuestionSubmitted = false
+    private var mScore = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,11 +42,7 @@ class QuizQuestionActivity : AppCompatActivity(), View.OnClickListener {
         val progress = "$currentPosition / ${binding.progressBar.max}"
         binding.tvProgress.text = progress
 
-        binding.sumbit.text = if (currentPosition == questionsList.size) {
-            "FINISH"
-        } else {
-            "SUBMIT"
-        }
+        binding.sumbit.text = "SUBMIT"
 
         defaultOptionsView()
 
@@ -105,6 +107,16 @@ class QuizQuestionActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    private fun launchResultActivity() {
+        val name = intent.getStringExtra(Constants.USER_NAME)
+        val resultIntent = Intent(this, ResultActivity::class.java)
+        resultIntent.putExtra(Constants.USER_NAME, name)
+        resultIntent.putExtra(Constants.TOTAL_CORRECT_ANSWER, mScore)
+        resultIntent.putExtra(Constants.TOTAL_QUESTIONS_COUNT, questionsList.size)
+        startActivity(resultIntent)
+        finish()
+    }
+
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.tv_option_one -> selectedOptionView(v as TextView, 1)
@@ -121,16 +133,14 @@ class QuizQuestionActivity : AppCompatActivity(), View.OnClickListener {
                             loadQuestion()
                         }
 
-                        else -> Toast.makeText(
-                            this,
-                            "You have successfully completed the quiz.",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        else -> launchResultActivity()
                     }
                 } else {
                     val question = questionsList[currentPosition - 1]
                     if (question.correctAnswer != selectedOptionPosition) {
                         answerView(selectedOptionPosition, R.drawable.wrong_option_border_bg)
+                    } else {
+                        mScore++
                     }
 
                     answerView(question.correctAnswer, R.drawable.correct_option_border_bg)
@@ -147,5 +157,23 @@ class QuizQuestionActivity : AppCompatActivity(), View.OnClickListener {
 
             else -> Log.e("QuizQuestionActivity", "Unexpected Error")
         }
+    }
+
+    override fun onBackPressed() {
+        val builder1: AlertDialog.Builder = AlertDialog.Builder(this@QuizQuestionActivity)
+        builder1.setMessage("You will loose all your progress. Are you sure you want to exit?")
+        builder1.setCancelable(true)
+
+        builder1.setPositiveButton(
+            "Exit",
+            DialogInterface.OnClickListener { _, _ -> super.onBackPressed() })
+
+        builder1.setNegativeButton(
+            "Go Back",
+            DialogInterface.OnClickListener { dialog, _ -> dialog.cancel() })
+
+        val dialog: AlertDialog = builder1.create()
+
+        dialog.show()
     }
 }
