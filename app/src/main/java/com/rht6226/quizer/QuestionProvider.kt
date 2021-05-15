@@ -5,9 +5,10 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.IOException
 
-class QuestionProvider(val context: Context) {
+class QuestionProvider(private val context: Context) {
 
-    private fun getJsonDataFromAsset(context: Context, fileName: String): String? {
+    private fun getJsonDataFromAsset(context: Context): String? {
+        val fileName = "question_data.json"
         val jsonString: String
         try {
             jsonString = context.assets.open(fileName).bufferedReader().use { it.readText() }
@@ -19,7 +20,7 @@ class QuestionProvider(val context: Context) {
     }
 
     fun parseJsonData(): ArrayList<QuestionData> {
-        val json = getJsonDataFromAsset(context, "questions.json")
+        val json = getJsonDataFromAsset(context)
         val gson = Gson()
         val arrayType = object : TypeToken<ArrayList<QuestionData>>() {}.type
         val questionList: ArrayList<QuestionData> = gson.fromJson(json, arrayType)

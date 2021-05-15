@@ -21,7 +21,7 @@ class ResultActivity : AppCompatActivity() {
         binding.tvName.text = userName
         binding.tvScore.text = resources.getString(R.string.score, score, questions)
 
-        binding.btnFinish.setOnClickListener{
+        binding.btnFinish.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }

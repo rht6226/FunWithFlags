@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/ic_bg"
-    android:orientation="vertical"
     android:gravity="center_horizontal"
+    android:orientation="vertical"
     android:padding="20dp"
     tools:context=".ResultActivity">
 
@@ -26,6 +26,7 @@
         android:layout_height="354dp"
         android:contentDescription="@string/image_of_a_trophy"
         android:src="@drawable/ic_trophy" />
+
     <TextView
         android:id="@+id/tv_congratulations"
         android:layout_width="wrap_content"

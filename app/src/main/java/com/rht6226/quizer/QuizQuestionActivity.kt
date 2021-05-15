@@ -17,7 +17,7 @@ import com.rht6226.quizer.databinding.ActivityQuizQuestionBinding
 class QuizQuestionActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var binding: ActivityQuizQuestionBinding
-    private val questionsList: ArrayList<Question> by lazy { Constants.getQuestions() }
+    private val questionsList: ArrayList<QuestionData> by lazy { QuestionProvider(this).parseJsonData() }
     private var currentPosition: Int = 1
     private var selectedOptionPosition: Int = 0
     private var mQuestionSubmitted = false
@@ -36,7 +36,7 @@ class QuizQuestionActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun loadQuestion() {
 
-        val question: Question = questionsList[currentPosition - 1]
+        val question: QuestionData = questionsList[currentPosition - 1]
         binding.progressBar.progress = currentPosition
         val progress = "$currentPosition / ${binding.progressBar.max}"
         binding.tvProgress.text = progress
@@ -45,6 +45,14 @@ class QuizQuestionActivity : AppCompatActivity(), View.OnClickListener {
 
         defaultOptionsView()
 
+        val imageDrawable = this.resources.getIdentifier(
+            question.image.split(".")[0],
+            "drawable",
+            Constants.PACKAGE_NAME
+        )
+
+        Log.d("Loader", imageDrawable.toString())
+
         binding.tvOptionOne.setOnClickListener(this)
         binding.tvOptionTwo.setOnClickListener(this)
         binding.tvOptionThree.setOnClickListener(this)
@@ -52,7 +60,7 @@ class QuizQuestionActivity : AppCompatActivity(), View.OnClickListener {
 
 
         binding.tvQuestion.text = question.question
-        binding.ivImage.setImageResource(question.image)
+        binding.ivImage.setImageResource(imageDrawable)
         binding.tvOptionOne.text = question.optionOne
         binding.tvOptionTwo.text = question.optionTwo
         binding.tvOptionThree.text = question.optionThree

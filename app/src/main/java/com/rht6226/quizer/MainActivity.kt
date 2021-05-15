@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.buttonStart.setOnClickListener {
-            if(binding.textViewName.text.toString().isEmpty()) {
+            if (binding.textViewName.text.toString().isEmpty()) {
                 Toast.makeText(this, "Please Enter your name", Toast.LENGTH_SHORT).show()
             } else {
                 val intent: Intent = Intent(this, QuizQuestionActivity::class.java)
